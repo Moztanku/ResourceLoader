@@ -61,10 +61,10 @@ void writeTop(std::ostream& stream, const std::filesystem::path& input_path)
 #include <SFML/Audio/Music.hpp>
 
 namespace Resources {{
-    std::unique_ptr<sf::Music> make_music(const std::string& path);
-    std::string read_text(const std::string& path);
-    sf::Texture make_texture(const std::string& path);
-    sf::SoundBuffer make_soundBuffer(const std::string& path);
+    inline std::unique_ptr<sf::Music> make_music(const std::string& path);
+    inline std::string read_text(const std::string& path);
+    inline sf::Texture make_texture(const std::string& path);
+    inline sf::SoundBuffer make_soundBuffer(const std::string& path);
 
 )";
 
@@ -75,7 +75,7 @@ namespace Resources {{
 void writeBottom(std::ostream& stream)
 {
     constexpr auto code = R"(
-    std::unique_ptr<sf::Music> make_music(const std::string& path)
+    inline std::unique_ptr<sf::Music> make_music(const std::string& path)
     {{
         auto music = std::make_unique<sf::Music>();
         if(!music->openFromFile(path))
@@ -83,7 +83,7 @@ void writeBottom(std::ostream& stream)
         return music;
     }}
 
-    std::string read_text(const std::string& path)
+    inline std::string read_text(const std::string& path)
     {{
         std::stringstream buffer;
 
@@ -95,7 +95,7 @@ void writeBottom(std::ostream& stream)
         return buffer.str();
     }}
 
-    sf::Texture make_texture(const std::string& path)
+    inline sf::Texture make_texture(const std::string& path)
     {{
         sf::Texture texture;
         if(!texture.loadFromFile(path))
@@ -103,7 +103,7 @@ void writeBottom(std::ostream& stream)
         return texture;
     }}
 
-    sf::SoundBuffer make_soundBuffer(const std::string& path)
+    inline sf::SoundBuffer make_soundBuffer(const std::string& path)
     {{
         sf::SoundBuffer buffer;
         if(!buffer.loadFromFile(path))

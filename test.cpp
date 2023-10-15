@@ -4,6 +4,8 @@
 #include <SFML/Audio.hpp>
 
 #include <memory>
+
+#include <lib.hpp>
 namespace textures = Resources::textures;
 // namespace sfx = Resources::
 
@@ -17,6 +19,8 @@ namespace textures = Resources::textures;
 
 int main()
 {
+    lib::test();
+
     // initialize the window
 
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");

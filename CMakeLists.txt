@@ -24,6 +24,6 @@ add_executable(test test.cpp ${CMAKE_CURRENT_SOURCE_DIR}/build/inc/Resources.bui
 target_include_directories(test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/inc)
 target_include_directories(test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/build/inc)
 
-target_link_libraries(test PRIVATE sfml-graphics sfml-window sfml-system)
+target_link_libraries(test PRIVATE sfml-graphics sfml-window sfml-system sfml-audio)
 
 target_compile_options(test PRIVATE -Wall -Wextra -pedantic -Werror -O3 -Wno-unused)

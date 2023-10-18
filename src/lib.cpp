@@ -8,4 +8,7 @@ namespace lib {
     {
         std::cout << "Hello from lib!\n";
     }
+
+    // myClass::myClass() 
+    // myClass myClass::instance = myClass();
 } // namespace lib

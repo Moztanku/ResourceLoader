@@ -13,21 +13,30 @@ target_compile_options(ResourceLoader PRIVATE -Wall -Wextra -pedantic -Werror -O
 file(GLOB_RECURSE RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/resources/*)
 
 add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/build/inc/Resources.build.hpp
-    COMMAND ResourceLoader ${CMAKE_CURRENT_SOURCE_DIR}/resources ${CMAKE_CURRENT_SOURCE_DIR}/build/inc
+    OUTPUT 
+        ${CMAKE_CURRENT_SOURCE_DIR}/build/inc/Resources.build.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/build/src/Resources.build.cpp
+    COMMAND 
+        ResourceLoader ${CMAKE_CURRENT_SOURCE_DIR}/resources ${CMAKE_CURRENT_SOURCE_DIR}/build
     DEPENDS ResourceLoader ${RESOURCES}
 )
+
+# Compile Resources.cpp
+file(GLOB_RECURSE resources_sources ${CMAKE_CURRENT_SOURCE_DIR}/build/src/*.cpp)
+add_library(resources STATIC ${resources_sources})
+target_include_directories(resources PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/build/inc)
 
 # lib
 file(GLOB_RECURSE lib_sources ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 add_library(lib STATIC ${lib_sources} ${CMAKE_CURRENT_SOURCE_DIR}/build/inc/Resources.build.hpp)
 target_include_directories(lib PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/build/inc ${CMAKE_CURRENT_SOURCE_DIR}/inc)
+target_link_libraries(lib PRIVATE sfml-graphics sfml-window sfml-system sfml-audio resources)
 
 # Compile test.cpp and link Resources.hpp
 add_executable(test test.cpp ${CMAKE_CURRENT_SOURCE_DIR}/build/inc/Resources.build.hpp)
 
 target_include_directories(test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/build/inc ${CMAKE_CURRENT_SOURCE_DIR}/inc)
 
-target_link_libraries(test PRIVATE sfml-graphics sfml-window sfml-system sfml-audio lib)
+target_link_libraries(test PRIVATE sfml-graphics sfml-window sfml-system sfml-audio lib resources)
 
 target_compile_options(test PRIVATE -Wall -Wextra -pedantic -Werror -O3 -Wno-unused)

@@ -19,6 +19,7 @@ namespace textures = Resources::textures;
 
 int main()
 {
+    lib::myClass::getInstance();
     lib::test();
 
     // initialize the window

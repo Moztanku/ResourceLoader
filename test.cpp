@@ -9,13 +9,8 @@
 namespace textures = Resources::textures;
 // namespace sfx = Resources::
 
-    std::unique_ptr<sf::Music> make_music(const std::string& path)
-    {
-        auto music = std::make_unique<sf::Music>();
-        if(!music->openFromFile(path))
-            throw std::runtime_error("Failed to load music " + path);
-        return music;
-    }
+#include <format>
+#include <iostream>
 
 int main()
 {
@@ -29,8 +24,6 @@ int main()
     // limit the framerate
     window.setFramerateLimit(60);
 
-
-
     sf::RectangleShape shape;
     shape.setSize({600,300});
     shape.setTexture(&textures::skinface);
@@ -38,21 +31,23 @@ int main()
     shape.setPosition(100,100);
 
     sf::Sound sound{Resources::sounds::air_raid};
+    sound.setPitch(0.5f);
+    sound.setVolume(10.f);
 
     auto& music = *Resources::music::I_Miss_You;
+    music.setPitch(0.25f);
+    music.setVolume(20.f);
 
     // create loop
     while (window.isOpen())
     {
         if(sound.getStatus() != sf::Sound::Status::Playing){
-            sound.setPitch(1.0f + (rand() % 100) / 100.0f);
             sound.play();
         }
         
         // handle events
 
         if(Resources::music::I_Miss_You->getStatus() != sf::Music::Status::Playing){
-            Resources::music::I_Miss_You->setPitch(1.0f + (rand() % 100) / 100.0f);
             Resources::music::I_Miss_You->play();
         }
 

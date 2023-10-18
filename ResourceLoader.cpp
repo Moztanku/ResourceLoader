@@ -60,7 +60,6 @@ void writeTop(std::ostream& header_stream, std::ostream& source_stream, const st
 #include <SFML/Audio/Music.hpp>
 
 namespace Resources {{
-
 )";
 
     constexpr auto source_code = R"(
@@ -79,7 +78,6 @@ namespace Resources {{
     inline std::string read_text(const std::string& path);
     inline sf::Texture make_texture(const std::string& path);
     inline sf::SoundBuffer make_soundBuffer(const std::string& path);
-    
 )";
 
     const std::string time = std::format("{:%Y-%m-%d %H:%M}", std::chrono::system_clock::now());
@@ -90,7 +88,6 @@ namespace Resources {{
 void writeBottom(std::ostream& header_stream, std::ostream& source_stream)
 {
     constexpr auto header_code = R"(
-
 }} // namespace Resources
 )";
     constexpr auto source_code = R"(

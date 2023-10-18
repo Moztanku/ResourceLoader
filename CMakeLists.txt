@@ -18,12 +18,13 @@ add_custom_command(
         ${CMAKE_CURRENT_SOURCE_DIR}/build/src/Resources.build.cpp
     COMMAND 
         ResourceLoader ${CMAKE_CURRENT_SOURCE_DIR}/resources ${CMAKE_CURRENT_SOURCE_DIR}/build
-    DEPENDS ResourceLoader ${RESOURCES}
+    DEPENDS 
+        ResourceLoader
+        ${RESOURCES}
 )
 
 # Compile Resources.cpp
-file(GLOB_RECURSE resources_sources ${CMAKE_CURRENT_SOURCE_DIR}/build/src/*.cpp)
-add_library(resources STATIC ${resources_sources})
+add_library(resources STATIC ${CMAKE_CURRENT_SOURCE_DIR}/build/src/Resources.build.cpp)
 target_include_directories(resources PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/build/inc)
 
 # lib

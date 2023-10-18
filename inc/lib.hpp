@@ -10,7 +10,7 @@ namespace lib {
         private: 
             myClass(){
                 std::cout << "Hello from myClass!\n";
-                std::cout << Resources::text::lorem_ipsum1 << std::endl;
+                // std::cout << Resources::text::lorem_ipsum1 << std::endl;
             };
         public:
             static myClass& getInstance(){

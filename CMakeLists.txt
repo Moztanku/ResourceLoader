@@ -1,4 +1,4 @@
-# Compile ResourceLoader and use it to generate Resources.hpp
+# Compile ResourceLoader and use it to generate Resources.build.hpp and Resources.build.cpp
 add_executable(ResourceLoader ResourceLoader.cpp)
 
 add_custom_command(
@@ -12,6 +12,5 @@ add_custom_command(
         ${RESOURCES}
 )
 
-# Compile Resources.cpp
 add_library(resources STATIC ${CMAKE_BINARY_DIR}/src/Resources.build.cpp)
 target_include_directories(resources PRIVATE ${CMAKE_BINARY_DIR}/inc)

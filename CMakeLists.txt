@@ -4,6 +4,9 @@ find_package(fmt REQUIRED)
 add_executable(ResourceLoader ResourceLoader.cpp)
 target_link_libraries(ResourceLoader PRIVATE fmt)
 
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/inc)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/src)
+
 add_custom_command(
     OUTPUT 
         ${CMAKE_BINARY_DIR}/inc/Resources.build.hpp

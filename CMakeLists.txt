@@ -1,5 +1,8 @@
 # Compile ResourceLoader and use it to generate Resources.build.hpp and Resources.build.cpp
+find_package(fmt REQUIRED)
+
 add_executable(ResourceLoader ResourceLoader.cpp)
+target_link_libraries(ResourceLoader PRIVATE fmt)
 
 add_custom_command(
     OUTPUT 

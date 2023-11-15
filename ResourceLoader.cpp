@@ -6,8 +6,10 @@
 #include <string>
 #include <sstream>
 #include <chrono>
-#include <format>
 #include <map>
+
+#include <fmt/core.h>
+#include <fmt/chrono.h>
 
 #ifdef _WIN32
     #define SLASH "\\"
@@ -84,9 +86,9 @@ namespace Resources {{
     inline sf::SoundBuffer make_soundBuffer(const std::string& path);
 )";
 
-    const std::string time = std::format("{:%Y-%m-%d %H:%M}", std::chrono::system_clock::now());
-    header_stream << std::format(header_code, input_path.string(), time);
-    source_stream << std::format(source_code, input_path.string(), time);
+    const std::string time = fmt::format("{:%Y-%m-%d %H:%M}", std::chrono::system_clock::now());
+    header_stream << fmt::format(header_code, input_path.string(), time);
+    source_stream << fmt::format(source_code, input_path.string(), time);
 }
 
 void writeBottom(std::ostream& header_stream, std::ostream& source_stream)
@@ -134,8 +136,8 @@ void writeBottom(std::ostream& header_stream, std::ostream& source_stream)
 }} // namespace Resources
 )";
 
-    header_stream << std::format(header_code);
-    source_stream << std::format(source_code);
+    header_stream << fmt::format(header_code);
+    source_stream << fmt::format(source_code);
 }
 
 struct ResourceLeaf {
@@ -168,8 +170,8 @@ struct ResourceLeaf {
                 relative_path_str += c;
         #endif
 
-        leaf.declaration = std::format("extern {} {}", type, name);
-        leaf.definition = std::format("{} {} = {}(\"{}\")",
+        leaf.declaration = fmt::format("extern {} {}", type, name);
+        leaf.definition = fmt::format("{} {} = {}(\"{}\")",
             type, name, fun, relative_path_str);
 
         return leaf;

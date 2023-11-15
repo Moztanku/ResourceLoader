@@ -40,7 +40,7 @@ std::vector<std::string> getFilesInDirectory(const std::filesystem::path& direct
         if(entry.is_directory()){
             auto directoryFiles = getFilesInDirectory(entry.path().string());
             files.insert(files.end(), directoryFiles.begin(), directoryFiles.end());
-        } else if(entry.is_regular_file() && entry.path().extension() != ".gitkeep"){
+        } else if(entry.is_regular_file() && entry.path().filename() != ".gitkeep"){
             files.push_back(entry.path().string());
         }
     }

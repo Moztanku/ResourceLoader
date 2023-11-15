@@ -2,16 +2,20 @@
 #include <filesystem>
 #include <fstream>
 #include <vector>
+#include <array>
 #include <string>
 #include <sstream>
 #include <chrono>
 #include <format>
 #include <map>
 
-void writeToFile(const std::filesystem::path& output_path, const std::filesystem::path& input_path);
+#ifdef _WIN32
+    #define SLASH "\\"
+#else
+    #define SLASH "/"
+#endif
 
-std::filesystem::path input_path;
-std::filesystem::path output_path;
+void writeToFile(const std::filesystem::path& output_path, const std::filesystem::path& input_path);
 
 int main(int argc, char** argv)
 {
@@ -20,8 +24,8 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    input_path = std::filesystem::path(argv[1]);
-    output_path = std::filesystem::path(argv[2]);
+    std::filesystem::path input_path = std::filesystem::path(argv[1]);
+    std::filesystem::path output_path = std::filesystem::path(argv[2]);
     
     writeToFile(output_path, input_path);
     return 0;
@@ -142,16 +146,31 @@ struct ResourceLeaf {
     {
         ResourceLeaf leaf;
         const auto it = std::find_if(string_constants.begin(), string_constants.end(), [&path](const auto& prefix){
-            return path.substr(0, path.find_first_of('/')) == prefix.first;
+            return path.substr(0, path.find_first_of(SLASH)) == prefix.first;
         });
         const auto [type, fun] = it->second;
 
-        const std::string_view name = path.substr(path.find_last_of('/') + 1, path.find_first_of('.') - path.find_last_of('/') - 1);
+        const std::string_view name = path.substr(path.find_last_of(SLASH) + 1, path.find_first_of('.') - path.find_last_of(SLASH) - 1);
         const auto relative_path = std::filesystem::path("resources") / path;
+
+        auto relative_path_str = relative_path.string();
+
+        #ifdef _WIN32
+        const auto copy_str = relative_path_str;
+        relative_path_str.clear();
+
+        relative_path_str += "..\\\\";
+
+        for (const char c : copy_str)
+            if (c == '\\')
+                relative_path_str += "\\\\";
+            else
+                relative_path_str += c;
+        #endif
 
         leaf.declaration = std::format("extern {} {}", type, name);
         leaf.definition = std::format("{} {} = {}(\"{}\")",
-            type, name, fun, relative_path.string());
+            type, name, fun, relative_path_str);
 
         return leaf;
     }
@@ -178,8 +197,8 @@ struct ResourceNode {
     {
         size_t pos = 0;
         for(int d = 0; d < depth; d++)
-            pos = path.find_first_of('/', pos + 1) + 1;
-        size_t nextPos = path.find_first_of('/', pos + 1);
+            pos = path.find_first_of(SLASH, pos + 1) + 1;
+        size_t nextPos = path.find_first_of(SLASH, pos + 1);
 
         if(nextPos == std::string_view::npos){
             leaves[path.substr(pos + 1)] = ResourceLeaf::make(path);
@@ -256,7 +275,7 @@ void writeToFile(const std::filesystem::path& output_path, const std::filesystem
 
         for (const auto& file : files) {
             const std::string_view relativePath = std::string_view(file).substr(input_path.string().size() + 1);
-            if(relativePath.substr(0, relativePath.find_first_of('/')) == type){
+            if(relativePath.substr(0, relativePath.find_first_of(SLASH)) == type){
                 root += relativePath;
             }
         }

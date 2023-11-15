@@ -5,10 +5,17 @@ project(ResourceLoader)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(SFML 2.6 COMPONENTS graphics window system audio REQUIRED)
+
+if(MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /WX /Od")
+    include_directories("C:\\Users\\mosta\\source\\libs\\SFML-2.6.1\\include")
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -Werror -O3 -Wno-unused")
+endif()
+
 # Compile ResourceLoader and use it to generate Resources.hpp
 add_executable(ResourceLoader ResourceLoader.cpp)
-
-target_compile_options(ResourceLoader PRIVATE -Wall -Wextra -pedantic -Werror -O3 -Wno-unused)
 
 file(GLOB_RECURSE RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/resources/*)
 
@@ -39,5 +46,3 @@ add_executable(test test.cpp ${CMAKE_CURRENT_SOURCE_DIR}/build/inc/Resources.bui
 target_include_directories(test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/build/inc ${CMAKE_CURRENT_SOURCE_DIR}/inc)
 
 target_link_libraries(test PRIVATE sfml-graphics sfml-window sfml-system sfml-audio lib resources)
-
-target_compile_options(test PRIVATE -Wall -Wextra -pedantic -Werror -O3 -Wno-unused)

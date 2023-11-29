@@ -2,7 +2,7 @@
 find_package(fmt REQUIRED)
 
 add_executable(ResourceLoader ResourceLoader.cpp)
-target_link_libraries(ResourceLoader PRIVATE fmt)
+target_link_libraries(ResourceLoader PRIVATE fmt::fmt)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/inc)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/src)
